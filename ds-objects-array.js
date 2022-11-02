@@ -44,11 +44,27 @@ function nthRecursive(list, num) {
   }
 }
 
-console.log(arrayToList([10, 20]));
-// → {value: 10, rest: {value: 20, rest: null}}
-console.log(listToArray(arrayToList([10, 20, 30])));
-// → [10, 20, 30]
-console.log(prepend(10, prepend(20, null)));
-// → {value: 10, rest: {value: 20, rest: null}}
-console.log(nth(arrayToList([10, 20, 30]), 1));
-// → 20
+function deepEqual(obj1, obj2) {
+  // shortcut: 
+  // if(JSON.stringify(obj1) === JSON.stringify(obj2)) return true;
+
+  if(obj1 === obj2) return true;
+  if(obj1 == null || obj2 == null ||
+    typeof obj1 != "object" ||
+    typeof obj2 != "object") return false;
+
+  let keysA = Object.keys(obj1),
+      keysB = Object.keys(obj2);
+  for(let key of keysA) {
+    if(!keysB.includes(key) || !deepEqual(obj1[key], obj2[key])) return false;
+  }
+  return true;
+}
+
+let obj = {here: {is: "an"}, object: 2};
+console.log(deepEqual(obj, obj));
+// → true
+console.log(deepEqual(obj, {here: 1, object: 2}));
+// → false
+console.log(deepEqual(obj, {here: {is: "an"}, object: 2}));
+// → true
